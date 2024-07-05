@@ -94,6 +94,11 @@ body {
     margin-top: 30px;
 }
 
+.word-etymology {
+    color: #575a7b;
+    margin-top: 30px;
+}
+
 .error {
     position: relative;
     font-size: 30px;
@@ -101,4 +106,16 @@ body {
     display: flex;
     justify-content: space-between;
     margin-top: 80px;
+}
+
+.title {
+    text-align: center;
+    /*border: 5px solid red;*/
+    width: 90vmin;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 12.5%;
+    font-size: 32px;
+    color: #fff;
 }
