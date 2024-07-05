@@ -57,6 +57,7 @@ body {
 .result h3 {
     font-size: 30px;
     color: #1f194c;
+    font-weight: 400;
 }
 
 .result .word {
@@ -115,7 +116,8 @@ body {
     position: absolute;
     transform: translate(-50%,-50%);
     left: 50%;
-    top: 12.5%;
+    top: -25%;
     font-size: 32px;
     color: #fff;
+    font-weight: 600;
 }

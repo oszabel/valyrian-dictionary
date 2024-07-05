@@ -1,4 +1,4 @@
-const url = "http://api.valyriandictionary.nhely.hu/";
+const url = "https://oszabel.github.io/valyriandictionary-api/";
 const result = document.getElementById("result");
 const sound = document.getElementById("sound");
 const btn = document.getElementById("search-btn");
@@ -20,7 +20,8 @@ btn.addEventListener("click", () => {
             </div>
             <p class="word-meaning">${data[0].meanings[0].definitions[0].definition}</p>
             <p class="word-etymology">${data[0].meanings[0].definitions[0].etymology}</p>
-            <p class="word-example">${data[0].meanings[0].definitions[0].example || ""}</p>`;
+            <p class="word-example">${data[0].meanings[0].definitions[0].example || ""}</p>
+            <p class="word-etymology">more info <a href="${data[0].moreinfo}">here</a></p>`;
             sound.setAttribute("src", `https:${data[0].phonetics[0].audio}`);
         })
         .catch( () => {
