@@ -1,4 +1,4 @@
-const url = "https://localhost:7278/api/Words/";
+const url = "https://valyrian-api.onrender.com/api/Words/";
 const result = document.getElementById("result");
 const sound = document.getElementById("sound");
 const btn = document.getElementById("search-btn");
