@@ -31,7 +31,7 @@ btn.addEventListener("click", () => {
             <p class="word-example">${firstMeaning.example || ""}</p>
             <p class="word-etymology">more info <a href="${data.moreInfo}">here</a></p>`;
 
-            const isVerb = data.type === 1 || data.type === "Verb";
+            const isVerb = data.type === 1 || data.type === "verb";
             if (isVerb) {
                 loadConjugation(data.id);
             } else {
@@ -39,7 +39,9 @@ btn.addEventListener("click", () => {
                 currentConjugation = null;
             }
 
-            sound.setAttribute("src", `${data.audioURL}`);
+            if (data.audioURL) {
+                sound.setAttribute("src", `${data.audioURL}`);
+            }
         })
         .catch((err) => {
             console.error("UI Rendering Error:", err);
