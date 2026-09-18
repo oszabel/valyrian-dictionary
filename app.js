@@ -15,21 +15,41 @@ btn.addEventListener("click", () => {
             let firstMeaning = data.meanings && data.meanings.length > 0 ? data.meanings[0] : {};
 
             console.log(data);
-            result.innerHTML = `
-            <div class="word">
-                <h3>${data.word}</h3>
-                <button onclick="playSound()"><i class="fas fa-volume-up"></i></button>
-            </div>
-            <div class="details">
-                <p>${firstMeaning.class || ""}</p>
-                <p>${firstMeaning.gender || ""}</p>
-                <p>${firstMeaning.partOfSpeech || ""}</p>
-                <p>${data.phoneticTranscript || ""}</p>
-            </div>
-            <p class="word-meaning">${firstMeaning.translation || ""}</p>
-            <p class="word-etymology">${firstMeaning.dialect || ""}</p>
-            <p class="word-example">${firstMeaning.example || ""}</p>
-            <p class="word-etymology">more info <a href="${data.moreInfo}">here</a></p>`;
+            let html = `
+                <div class="word">
+                    <h3>${data.word}</h3>
+                    <button onclick="playSound()"><i class="fas fa-volume-up"></i></button>
+                </div>
+                <div class="details">`;
+
+            if (firstMeaning.class) html += `<p>${firstMeaning.class || ""}</p>`;
+            if (firstMeaning.gender) html += `<p>${firstMeaning.gender || ""}</p>`;
+
+            html += `
+                    <p>${firstMeaning.partOfSpeech || ""}</p>
+                    <p>${data.phoneticTranscript || ""}</p>
+                </div>
+                <p class="word-meaning">${firstMeaning.translation || ""}</p>
+                <p class="word-etymology">${firstMeaning.dialect || ""}</p>
+                <p class="word-example">${firstMeaning.example || ""}</p>
+                <p class="word-etymology">more info <a href="${data.moreInfo}">here</a></p>`;
+
+            result.innerHTML = html;
+            // result.innerHTML = `
+            // <div class="word">
+            //     <h3>${data.word}</h3>
+            //     <button onclick="playSound()"><i class="fas fa-volume-up"></i></button>
+            // </div>
+            // <div class="details">
+            //     <p>${firstMeaning.class || ""}</p>
+            //     <p>${firstMeaning.gender || ""}</p>
+            //     <p>${firstMeaning.partOfSpeech || ""}</p>
+            //     <p>${data.phoneticTranscript || ""}</p>
+            // </div>
+            // <p class="word-meaning">${firstMeaning.translation || ""}</p>
+            // <p class="word-etymology">${firstMeaning.dialect || ""}</p>
+            // <p class="word-example">${firstMeaning.example || ""}</p>
+            // <p class="word-etymology">more info <a href="${data.moreInfo}">here</a></p>`;
 
             const isVerb = data.type === 1 || data.type === "verb";
             if (isVerb) {
