@@ -12,7 +12,9 @@ btn.addEventListener("click", () => {
         })
         .then((data) => {
 
+            // let firstMeaning = data.meanings && data.meanings.length > 0 ? data.meanings[0] : {};
             let firstMeaning = data.meanings && data.meanings.length > 0 ? data.meanings[0] : {};
+            let meanings = data.meanings;
 
             console.log(data);
             let html = `
@@ -28,11 +30,51 @@ btn.addEventListener("click", () => {
             html += `
                     <p>${firstMeaning.partOfSpeech || ""}</p>
                     <p>${data.phoneticTranscript || ""}</p>
-                </div>
-                <p class="word-meaning">${firstMeaning.translation || ""}</p>
+                </div>`;
+
+            if(meanings.length > 1) {
+                for (let i = 0; i < meanings.length; i++) {
+                    
+                    html += `
+                        <p class="word-meaning">${i+1}. ${meanings[i].translation || ""}</p>
+                        <!-- <p class="word-etymology">${meanings[i].dialect || ""}</p> -->`;
+
+                    if (meanings[i].example)
+                        html += `<p class="word-example">${meanings[i].example || ""}</p>`;
+
+                    if (meanings[i].synonyms)
+                        html += `<p class = "word-synonym">Synonym${meanings[i].synonyms.includes(",") ? "s" : ""}: <span>${meanings[i].synonyms || ""}</span></p>`;
+
+                    if (meanings[i].antonyms)
+                        html += `<p class = "word-antonym">Antonym${meanings[i].antonyms.includes(",") ? "s" : ""}: <span>${meanings[i].antonyms || ""}</span></p>`;
+
+                    if (i != (meanings.length-1) && meanings[i].example)
+                        html += `<br><br>`;
+                    else if (i != (meanings.length-1) && !meanings[i].example)
+                        html += `<br>`;
+                }
+            }
+            else {
+                html += `
+                    <p class="word-meaning">${firstMeaning.translation || ""}</p>
+                    <!-- <p class="word-etymology">${firstMeaning.dialect || ""}</p> -->
+                    <p class="word-example">${firstMeaning.example || ""}</p>`;
+
+                if (firstMeaning.synonyms)
+                    html += `
+                    <p class = "word-synonym">Synonym${firstMeaning.synonyms.includes(",") ? "s" : ""}: <span>${firstMeaning.synonyms || ""}</span></p>`;
+                
+                if(firstMeaning.antonyms)
+                    html += `
+                    <p class = "word-antonym">Antonym${firstMeaning.antonyms.includes(",") ? "s" : ""}: <span>${firstMeaning.antonyms || ""}</span></p>`;
+            }
+
+            html += `<p class="word-etymology">more info <a href="${data.moreInfo}">here</a></p>`;
+
+            /*<p class="word-meaning">${firstMeaning.translation || ""}</p>
                 <p class="word-etymology">${firstMeaning.dialect || ""}</p>
                 <p class="word-example">${firstMeaning.example || ""}</p>
-                <p class="word-etymology">more info <a href="${data.moreInfo}">here</a></p>`;
+                <p class="word-etymology">more info <a href="${data.moreInfo}">here</a></p>*/
 
             result.innerHTML = html;
             // result.innerHTML = `
