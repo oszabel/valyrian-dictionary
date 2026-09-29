@@ -272,3 +272,68 @@ body {
     margin: 5px;
     font-size: 14px;
 }
+
+/* LOADING SCREEN */
+.wakeup-text {
+    display: none;
+}
+
+.skeleton-word {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 80px;
+}
+
+.skeleton-line {
+    background: linear-gradient(90deg, #dee2e6 25%, #ced4da 50%, #dee2e6 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-title {
+    width: 45%;
+    height: 30px;
+}
+
+.skeleton-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+}
+
+.skeleton-details {
+    display: flex;
+    gap: 0.5em;
+    margin: 15px 0 20px 0;
+}
+
+.skeleton-details .skeleton-line {
+    width: 60px;
+    height: 14px;
+}
+
+.skeleton-meaning {
+    width: 70%;
+    height: 16px;
+    margin-bottom: 30px;
+}
+
+.skeleton-example {
+    width: 90%;
+    height: 40px;
+    margin-top: 30px;
+}
+
+.wakeup-text {
+    /* color: #575a7b; */
+    color: #adb5bd;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 15px;
+}

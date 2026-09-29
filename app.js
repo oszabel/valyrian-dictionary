@@ -3,14 +3,43 @@ const result = document.getElementById("result");
 const sound = document.getElementById("sound");
 const btn = document.getElementById("search-btn");
 
+const wakeupText = document.getElementById("wakeup-text");
+
+function showSkeleton() {
+    result.innerHTML = `
+        <div class="skeleton-word">
+            <div class="skeleton-line skeleton-title"></div>
+            <div class="skeleton-line skeleton-icon"></div>
+        </div>
+        <div class="skeleton-details">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+        </div>
+        <div class="skeleton-line skeleton-meaning"></div>
+        <div class="skeleton-line skeleton-example"></div>
+    `;
+}
+
 btn.addEventListener("click", () => {
     let inpWord = document.getElementById("inp-word").value;
+
+    conjugationSection.style.display = "none";
+    showSkeleton();
+    wakeupText.style.display = "none";
+
+    const wakeupTimer = setTimeout(() => {
+        wakeupText.style.display = "block";
+    }, 8000);
+
     fetch(`${url}search/${inpWord}`)
         .then((response) => {
             if(!response.ok) throw new Error("Word not found!");
             return response.json();
         })
         .then((data) => {
+            clearTimeout(wakeupTimer);
+            wakeupText.style.display = "none";
 
             // let firstMeaning = data.meanings && data.meanings.length > 0 ? data.meanings[0] : {};
             let firstMeaning = data.meanings && data.meanings.length > 0 ? data.meanings[0] : {};
@@ -106,8 +135,11 @@ btn.addEventListener("click", () => {
             }
         })
         .catch((err) => {
+            clearTimeout(wakeupTimer);
+            wakeupText.style.display = "none";
             console.error("UI Rendering Error:", err);
-            result.innerHTML = `<h3 class="error">Couldn't find the word</h3>`
+            result.innerHTML = `<h3 class="error">Couldn't find the word</h3>`;
+            conjugationSection.style.display = "none";
         })
 });
 function playSound(){
