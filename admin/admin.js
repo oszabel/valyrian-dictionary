@@ -73,7 +73,7 @@ function meaningFormHTML(n, defaults) {
         <fieldset class="meaning">
             <div class="input-group">
                 <label for="m${n}-translation" class="input-label">Translation</label>
-                <input type="text" class="f-translation" id="m${n}-translation" maxlength="100" size="20">
+                <input type="text" class="f-translation" id="m${n}-translation" maxlength="222" size="20">
             </div>
 
             <div class="input-group">
@@ -92,12 +92,12 @@ function meaningFormHTML(n, defaults) {
 
             <div class="input-group">
               <label for="m${n}-synonyms" class="input-label">Synonyms</label>
-              <input type="text" class="f-synonyms" id="m${n}-synonyms" maxlength="100" size="20">
+              <input type="text" class="f-synonyms" id="m${n}-synonyms" maxlength="222" size="20">
             </div>
 
             <div class="input-group">
               <label for="m${n}-antonyms" class="input-label">Antonyms</label>
-              <input type="text" class="f-antonyms" id="m${n}-antonyms" maxlength="100" size="20">
+              <input type="text" class="f-antonyms" id="m${n}-antonyms" maxlength="222" size="20">
             </div>
         </fieldset>
     </form>
