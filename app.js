@@ -189,6 +189,13 @@ inpWord.addEventListener("input", async () => {
     }
 });
 
+inpWord.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        suggestionsList.innerHTML = "";
+        btn.click();
+    }
+});
+
 // 2. Hide suggestions if the user clicks anywhere else on the page
 document.addEventListener("click", (e) => {
     if (!inpWord.contains(e.target) && !suggestionsList.contains(e.target)) {

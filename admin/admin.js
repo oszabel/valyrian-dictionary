@@ -3,6 +3,17 @@ const url = "https://valyrian-api.onrender.com/api/Words/";
 // Every entry is in High Valyrian, so the dialect is fixed.
 const DIALECT = "High Valyrian";
 
+// ENUM VALUES
+const ENUM_VALUES = {
+  type: { Noun: 0, Verb: 1, Adjective: 2, Adverb: 3, Pronoun: 4, Numeral: 5 },
+    gender: { Lunar: 0, Solar: 1, Terrestrial: 2, Aquatic: 3 },
+    stemClass: {
+        LiquidStem: 0, VoicelessStopStem: 1, NasalStem: 2, VoicedStopStem: 3,
+        FricativeOrClusterStem: 4, PalatalResonantStem: 5,
+        AStem: 6, EStem: 7, IStem: 8, OStem: 9, UStem: 10, Irregular: 11
+    }
+}
+
 // ELEMENT REFERENCES
 const nextBtn = document.getElementById("next-btn");
 const resetBtn = document.getElementById("reset-btn");
@@ -242,7 +253,15 @@ async function postWord(){
 
   // The server builds SearchKey itself, and meaningCount is only for this page.
   const {meaningCount, ...fields} = word;
-  const body = {...fields, meanings};
+  const typeValue = ENUM_VALUES.type[fields.type];
+  const genderValue = fields.gender === null ? null : ENUM_VALUES.gender[fields.gender];
+  const stemClassValue = fields.stemClass === null ? null : ENUM_VALUES.stemClass[fields.stemClass];
+  if ([typeValue, genderValue, stemClassValue].includes(undefined)) {
+    showMessages(postMessages, ["A selected option has no number in ENUM_VALUES at the top of admin.js. Add it there."], "err");
+    return;
+  }
+
+  const body = { ...fields, type: typeValue, gender: genderValue, stemClass: stemClassValue, meanings };
 
   postBtn.disabled = true;
   postBtn.textContent = "Posting...";
@@ -292,284 +311,30 @@ document.addEventListener("change", (e) => {
 // Never let Enter inside a text field submit a form and reload the page.
 document.addEventListener("submit", (e) => e.preventDefault());
 
-// OLD CODE
-/* nextBtn.addEventListener("click", () => {
-    const word = document.getElementById("word").value;
-    
-    const phoneticTranscript = document.getElementById("phoneticTranscript").value;
-    
-    const moreInfo = word != null ? `https://wiki.languageinvention.com/index.php?title=${word}` : null;
-    
-    const audioURL = document.getElementById("audioURL")?.value || null;
-    
-    const searchKey = document.getElementById("searchKey").value;
-    
-    const perfectStem = document.getElementById("perfectStem")?.value || null;
-
-    const numberOfMeanings = document.getElementById("numberOfMeanings").value;
-
-    const gender = document.querySelector('input[name="gender-checkbox"]:checked')?.value || null;
-
-    const type = document.querySelector('input[name="type-checkbox"]:checked')?.value || null;
-
-    const stemClass = document.querySelector('input[name="stemClass-checkbox"]:checked')?.value || null;
-
-    let errorFound = false;
-
-    // Checking whether everything's okay
-    if (type == 0 && type != null && (perfectStem != null || stemClass != null || gender == null)) {
-        next.innerHTML += `
-          <p>A noun must have a gender! Nouns don't have stem classes nor perfect stems!</p>
-        `;
-        console.error("A noun must have a gender! Nouns don't have stem classes nor perfect stems!");
-        // return;
-        errorFound = true;
-    }
-
-    if (type == 1 && type != null && (perfectStem == null || stemClass == null || gender != null)) {
-        next.innerHTML += `
-          <p>A verb must have a perfect stem and a stem class! Verbs don't have gender!</p>
-        `;
-        console.error("A verb must have a perfect stem and a stem class! Verbs don't have gender!");
-        // return;
-        errorFound = true;
-    }
-
-    if (type != 0 && type != 1 && type != null && (perfectStem != null || stemClass != null || gender != null)) {
-        next.innerHTML += `
-          <p>Adjectives, adverbs, pronouns and numerals don't have genders, stem classes or perfect stems!</p>
-        `;
-        console.error("Adjectives, adverbs, pronouns and numerals don't have genders, stem classes or perfect stems!");
-        // return;
-        errorFound = true;
-    }
-
-    if (type == null && (perfectStem != null || stemClass != null || gender != null)) {
-        next.innerHTML += `
-          <p>A word type must be selected!</p>
-        `;
-        console.error("A word type must be selected!");
-        // return;
-        errorFound = true;
-    }
-
-    if (!errorFound) {
-        console.log(`Word: ${word}`);
-        console.log(`Phonetic transcript: ${phoneticTranscript}`);
-        console.log(`More info: ${moreInfo}`);
-        console.log(`Audio url: ${audioURL}`);
-        console.log(`Search key: ${searchKey}`);
-        console.log(`Perfect stem: ${perfectStem}`);
-        console.log(`Number of meanings: ${numberOfMeanings}`);
-        console.log(`Gender: ${gender}`);
-        console.log(`Type: ${type}`);
-        console.log(`Stem class: ${stemClass}`);
-
-        let html = ``;
-        for (let i = 0; i < numberOfMeanings; i++) {
-            let suffix = "";
-            switch (i+1){
-                case 1: suffix = "st"; break;
-                case 2: suffix = "nd"; break;
-                case 3: suffix = "rd"; break;
-                default: suffix = "th";
-            }
-
-            html += `
-                <h2>${i+1}${suffix} Meaning</h2>
-                <form id="${i+1}${suffix}Meaning">
-                    <fieldset class="meaning">
-                        <div class="input-group">
-                            <label for="${i+1}${suffix}Translation" class="input-label">Translation</label>
-                            <input type="text" id="${i+1}${suffix}Translation" maxlength="100" size="20">
-                        </div>
-        
-                        <div class="input-group">
-                            <label for="${i+1}${suffix}Posb1" class="input-label">Part of speech</label>
-                            <div id="checkbox-btn" class="checkbox-group">
-                                <input type="checkbox" name="pos-checkbox" value="noun" id="${i+1}${suffix}Posb1">
-                                <label for="${i+1}${suffix}Posb1" class="checkbox-label">Noun</label>
-                                
-                                <input type="checkbox" name="pos-checkbox" value="verb" id="${i+1}${suffix}Posb2">
-                                <label for="${i+1}${suffix}Posb2" class="checkbox-label">Verb</label>
-                                
-                                <input type="checkbox" name="pos-checkbox" value="adjective" id="${i+1}${suffix}Posb3">
-                                <label for="${i+1}${suffix}Posb3" class="checkbox-label">Adjective</label>
-        
-                                <input type="checkbox" name="pos-checkbox" value="adverb" id="${i+1}${suffix}Posb4">
-                                <label for="${i+1}${suffix}Posb4" class="checkbox-label">Adverb</label>
-        
-                                <input type="checkbox" name="pos-checkbox" value="pronoun" id="${i+1}${suffix}Posb5">
-                                <label for="${i+1}${suffix}Posb5" class="checkbox-label">Pronoun</label>
-        
-                                <input type="checkbox" name="pos-checkbox" value="numeral" id="${i+1}${suffix}Posb6">
-                                <label for="${i+1}${suffix}Posb6" class="checkbox-label">Numeral</label>
-                            </div>
-                        </div>
-        
-                        <div class="input-group">
-                            <label for="${i+1}${suffix}Classb1" class="input-label">Class</label>
-                            <div id="checkbox-btn" class="checkbox-group">
-                                <input type="checkbox" name="class-checkbox" value="1st declension" id="${i+1}${suffix}Classb1">
-                                <label for="${i+1}${suffix}Classb1" class="checkbox-label">1st declension</label>
-                                
-                                <input type="checkbox" name="class-checkbox" value="2nd declension" id="${i+1}${suffix}Classb2">
-                                <label for="${i+1}${suffix}Classb2" class="checkbox-label">2nd declension</label>
-                                
-                                <input type="checkbox" name="class-checkbox" value="3rd declension" id="${i+1}${suffix}Classb3">
-                                <label for="${i+1}${suffix}Classb3" class="checkbox-label">3rd declension</label>
-        
-                                <input type="checkbox" name="class-checkbox" value="4th declension" id="${i+1}${suffix}Classb4">
-                                <label for="${i+1}${suffix}Classb4" class="checkbox-label">4th declension</label>
-        
-                                <input type="checkbox" name="class-checkbox" value="5th declension" id="${i+1}${suffix}Classb5">
-                                <label for="${i+1}${suffix}Classb5" class="checkbox-label">5th declension</label>
-        
-                                <input type="checkbox" name="class-checkbox" value="6th declension" id="${i+1}${suffix}Classb6">
-                                <label for="${i+1}${suffix}Classb6" class="checkbox-label">6th declension</label>
-        
-                                <input type="checkbox" name="class-checkbox" value="vowel-final" id="${i+1}${suffix}Classb7">
-                                <label for="${i+1}${suffix}Classb7" class="checkbox-label">V-final</label>
-        
-                                <input type="checkbox" name="class-checkbox" value="consonant-final" id="${i+1}${suffix}Classb8">
-                                <label for="${i+1}${suffix}Classb8" class="checkbox-label">C-final</label>
-        
-                                <input type="checkbox" name="class-checkbox" value="consonant-final" id="${i+1}${suffix}Classb9">
-                                <label for="${i+1}${suffix}Classb9" class="checkbox-label">Irregular</label>
-        
-                                <input type="checkbox" name="class-checkbox" value="class I" id="${i+1}${suffix}Classb10">
-                                <label for="${i+1}${suffix}Classb10" class="checkbox-label">Class I</label>
-        
-                                <input type="checkbox" name="class-checkbox" value="class II" id="${i+1}${suffix}Classb11">
-                                <label for="${i+1}${suffix}Classb11" class="checkbox-label">Class II</label>
-        
-                                <input type="checkbox" name="class-checkbox" value="class III" id="${i+1}${suffix}Classb12">
-                                <label for="${i+1}${suffix}Classb12" class="checkbox-label">Class III</label>
-                            </div>
-                        </div>
-                    </fieldset>
-                    <fieldset class="example">
-                        <label for="${i+1}${suffix}Examples" class="input-label">Examples</label>
-                        <textarea name="examples" id="${i+1}${suffix}Examples" maxlength="444"></textarea>
-        
-                        <div class="input-group">
-                            <label for="${i+1}${suffix}Synonyms" class="input-label">Synonyms</label>
-                            <input type="text" id="${i+1}${suffix}Synonyms" maxlength="100" size="20">
-                        </div>
-        
-                        <div class="input-group">
-                            <label for="${i+1}${suffix}Antonyms" class="input-label">Antonyms</label>
-                            <input type="text" id="${i+1}${suffix}Antonyms" maxlength="100" size="20">
-                        </div>
-                    </fieldset>
-                </form>
-            `;
-        }
-
-        if(numberOfMeanings <= 0) {
-            next.innerHTML += `
-                <p>A word must have at least one meaning!</p>
-            `;
-        }
-        else {
-            meanings.innerHTML = html;
-            post.classList.toggle('visible');
-        }
-    }
-});
-
-
-const genderCheckbox = document.querySelectorAll('input[name="gender-checkbox"]');
-genderCheckbox.forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    genderCheckbox.forEach(otherCheckbox => {
-      // If it's not the checkbox that was just clicked, uncheck it
-      if (otherCheckbox !== this) {
-        otherCheckbox.checked = false;
-      }
-    });
-  });
-});
-
-
-const typeCheckbox = document.querySelectorAll('input[name="type-checkbox"]');
-typeCheckbox.forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    typeCheckbox.forEach(otherCheckbox => {
-      // If it's not the checkbox that was just clicked, uncheck it
-      if (otherCheckbox !== this) {
-        otherCheckbox.checked = false;
-      }
-    });
-  });
-});
-
-
-const stemClassCheckbox = document.querySelectorAll('input[name="stemClass-checkbox"]');
-stemClassCheckbox.forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    stemClassCheckbox.forEach(otherCheckbox => {
-      // If it's not the checkbox that was just clicked, uncheck it
-      if (otherCheckbox !== this) {
-        otherCheckbox.checked = false;
-      }
-    });
-  });
-});
-
-
-const partOfSpeechCheckbox = document.querySelectorAll('input[name="pos-checkbox"]');
-partOfSpeechCheckbox.forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    partOfSpeechCheckbox.forEach(otherCheckbox => {
-      // If it's not the checkbox that was just clicked, uncheck it
-      if (otherCheckbox !== this) {
-        otherCheckbox.checked = false;
-      }
-    });
-  });
-});
-
-
-const classCheckbox = document.querySelectorAll('input[name="class-checkbox"]');
-classCheckbox.forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    classCheckbox.forEach(otherCheckbox => {
-      // If it's not the checkbox that was just clicked, uncheck it
-      if (otherCheckbox !== this) {
-        otherCheckbox.checked = false;
-      }
-    });
-  });
-});*/
-
-
-
-
 // CSS SQUIRCLE
-if (!CSS.supports("corner-shape", "squircle")) {
-  const n = 4;
-  const path = (w, h, steps = 120) => {
-    const pts = [];
-    for (let i = 0; i < steps; i++) {
-      const t = (i / steps) * steps * Math.PI;
-      const c = Math.cos(t), s = Math.sin(t);
-      const x = w / 2 + (w / 2) * Math.sign(c) * Math.abs(c) ** (2 / n);     
-      const y = h / 2 + (h / 2) * Math.sign(s) * Math.abs(s) ** (2 / n);
-      pts.push(`${x.toFixed(2)}px ${y.toFixed(2)}px`);
-    }
-    return `polygon(${pts.join(",")})`;
-  };
+// if (!CSS.supports("corner-shape", "squircle")) {
+//   const n = 4;
+//   const path = (w, h, steps = 120) => {
+//     const pts = [];
+//     for (let i = 0; i < steps; i++) {
+//       const t = (i / steps) * 2 * Math.PI
+//       const c = Math.cos(t), s = Math.sin(t);
+//       const x = w / 2 + (w / 2) * Math.sign(c) * Math.abs(c) ** (2 / n);     
+//       const y = h / 2 + (h / 2) * Math.sign(s) * Math.abs(s) ** (2 / n);
+//       pts.push(`${x.toFixed(2)}px ${y.toFixed(2)}px`);
+//     }
+//     return `polygon(${pts.join(",")})`;
+//   };
 
-  const ro = new ResizeObserver(entries => {
-    for (const { target, contentRect = r } of entries) {
-      //target.style.borderRadius = "0";
-      target.style.clipPath = path(r.width, r.height);
-    }
-  });
-  const elements = [".container", ".input-group input", ".input-group input:focus", ".checkbox-label", ".post.visible .btn", ".next .btn", "textarea", "textarea:focus"]
+//   const ro = new ResizeObserver(entries => {
+//     for (const { target, contentRect: r } of entries) {
+//       //target.style.borderRadius = "0";
+//       target.style.clipPath = path(r.width, r.height);
+//     }
+//   });
+//   const elements = [".container", ".input-group input", ".input-group input:focus", ".checkbox-label", ".post.visible .btn", ".next .btn", "textarea", "textarea:focus"]
   
-  for (let i = 0; i < elements.length; i++) {
-    document.querySelectorAll(elements[i]).forEach(el => ro.observe(el));
-  }
-}
+//   for (let i = 0; i < elements.length; i++) {
+//     document.querySelectorAll(elements[i]).forEach(el => ro.observe(el));
+//   }
+// }
