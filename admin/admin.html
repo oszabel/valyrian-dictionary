@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="website icon" type="webp" href="favicon.webp">
+    <title>ADMIN • High Valyrian Dictionary</title>
+</head>
+<body>
+    <div class="container" id="container">
+        <h2 class="title">Admin</h2>
+        <form>
+            <fieldset class="word">
+                <div class="input-group">
+                    <label for="word" class="input-label">Word</label>
+                    <input type="text" id="word" maxlength="100" size="20">
+                </div>
+    
+                <div class="input-group">
+                    <label for="phoneticTranscript" class="input-label">Phonetic Transcript</label>
+                    <input type="text" id="phoneticTranscript" maxlength="100" size="20">
+                </div>
+            
+                <div class="input-group">
+                    <label for="audioURL" class="input-label">Audio URL</label>
+                    <input type="text" id="audioURL" maxlength="100" size="20">
+                </div>
+    
+                <!-- <div class="input-group">
+                    <label for="searchKey" class="input-label">Search key</label>
+                    <input type="text" id="searchKey" maxlength="100" size="30">
+                </div> -->
+
+                <div class="input-group">
+                    <label for="perfectStem" class="input-label">Perfect stem</label>
+                    <input type="text" id="perfectStem" maxlength="100" size="30" placeholder="zāltan minus -an → zālt">
+                </div>
+
+                <div class="input-group">
+                    <label for="numberOfMeanings" class="input-label">Number of meanings</label>
+                    <input type="number" name="numberOfMeanings" id="numberOfMeanings" min="1" max="12" value="1">
+                </div>
+            </fieldset>
+    
+            <fieldset class="classes">
+                <div class="input-group">
+                    <label for="gb1" class="input-label">Gender</label>
+                    <!-- <input type="text" id="gender" maxlength="100" size="30"> -->
+                    <div id="checkbox-btn" class="checkbox-group" data-field="gender">
+                        <input type="checkbox" name="gender-checkbox" value="Lunar" id="gb1">
+                        <label for="gb1" class="checkbox-label">Lunar</label>
+                        
+                        <input type="checkbox" name="gender-checkbox" value="Solar" id="gb2">
+                        <label for="gb2" class="checkbox-label">Solar</label>
+                        
+                        <input type="checkbox" name="gender-checkbox" value="Aquatic" id="gb3">
+                        <label for="gb3" class="checkbox-label">Aquatic</label>
+
+                        <input type="checkbox" name="gender-checkbox" value="Terrestrial" id="gb4">
+                        <label for="gb4" class="checkbox-label">Terrestrial</label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="tb1" class="input-label">Type</label>
+                    <!-- <input type="text" id="gender" maxlength="100" size="30"> -->
+                    <div id="checkbox-btn" class="checkbox-group" data-field="type">
+                        <input type="checkbox" name="type-checkbox" value="Noun" id="tb1">
+                        <label for="tb1" class="checkbox-label">Noun</label>
+                        
+                        <input type="checkbox" name="type-checkbox" value="Verb" id="tb2">
+                        <label for="tb2" class="checkbox-label">Verb</label>
+                        
+                        <input type="checkbox" name="type-checkbox" value="Adjective" id="tb3">
+                        <label for="tb3" class="checkbox-label">Adjective</label>
+
+                        <input type="checkbox" name="type-checkbox" value="Adverb" id="tb4">
+                        <label for="tb4" class="checkbox-label">Adverb</label>
+
+                        <input type="checkbox" name="type-checkbox" value="Pronoun" id="tb5">
+                        <label for="tb5" class="checkbox-label">Pronoun</label>
+
+                        <input type="checkbox" name="type-checkbox" value="Numeral" id="tb6">
+                        <label for="tb6" class="checkbox-label">Numeral</label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="scb1" class="input-label">Stem Class</label>
+
+                    <div id="checkbox-btn" class="checkbox-group" data-field="stemClass">
+                        <input type="checkbox" name="stemClass-checkbox" value="LiquidStem" id="scb1">
+                        <label for="scb1" class="checkbox-label"><abbr title="root ends in l or r (not lj)">Liquid (C)</abbr></label>
+
+                        <input type="checkbox" name="stemClass-checkbox" value="VoicelessStopStem" id="scb2">
+                        <label for="scb2" class="checkbox-label"><abbr title="root ends in p, t, k, or q">Voiceless (C)</abbr></label>
+
+                        <input type="checkbox" name="stemClass-checkbox" value="NasalStem" id="scb3">
+                        <label for="scb3" class="checkbox-label"><abbr title="root ends in m or n (not ñ)">Nasal (C)</abbr></label>
+
+                        <input type="checkbox" name="stemClass-checkbox" value="VoicedStopStem" id="scb4">
+                        <label for="scb4" class="checkbox-label"><abbr title="root ends in b, d, or g">Voiced (C)</abbr></label>
+
+                        <input type="checkbox" name="stemClass-checkbox" value="FricativeOrClusterStem" id="scb5">
+                        <label for="scb5" class="checkbox-label"><abbr title="root ends in h, s, z, gh, v, j, or a cluster">Fricative or Cluster (C)</abbr></label>
+
+                        <input type="checkbox" name="stemClass-checkbox" value="PalatalResonantStem" id="scb6">
+                        <label for="scb6" class="checkbox-label"><abbr title="root ends in ñ or lj">Palatal (C)</abbr></label>
+
+                        <input type="checkbox" name="stemClass-checkbox" value="AStem" id="scb7">
+                        <label for="scb7" class="checkbox-label">A-stem (V)</label>
+
+                        <input type="checkbox" name="stemClass-checkbox" value="EStem" id="scb8">
+                        <label for="scb8" class="checkbox-label">E-stem (V)</label>
+
+                        <input type="checkbox" name="stemClass-checkbox" value="IStem" id="scb9">
+                        <label for="scb9" class="checkbox-label">I-stem (V)</label>
+
+                        <input type="checkbox" name="stemClass-checkbox" value="OStem" id="scb10">
+                        <label for="scb10" class="checkbox-label">O-stem (V)</label>
+
+                        <input type="checkbox" name="stemClass-checkbox" value="UStem" id="scb11">
+                        <label for="scb11" class="checkbox-label">U-stem (V)</label>
+
+                        <input type="checkbox" name="stemClass-checkbox" value="Irregular" id="scb12">
+                        <label for="scb12" class="checkbox-label">Irregular</label>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <div class="next" id="next">
+            <div class="btn-row">
+                <button class="btn" type="button" id="next-btn">Next</button>
+                <button class="btn secondary" type="button" id="reset-btn">Reset</button>
+            </div>
+        </div>
+
+        <div class="messages" id="messages" role="status" aria-live="polite"></div>
+
+        
+        <div class="meanings" id="meanings"></div>
+
+        <div id="post" class="post">
+            <div class="input-group">
+                <label for="adminKey" class="input-label">Admin key</label>
+                <input type="password" id="adminKey" autocomplete="off">
+            </div>
+            <button class="btn" type="button" id="post-btn">POST</button>
+            <div class="messages" id="post-messages" role="status" aria-live="polite"></div>
+        </div>
+    </div>
+    <script src="admin.js"></script>
+</body>
+</html>

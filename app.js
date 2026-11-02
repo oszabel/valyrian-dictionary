@@ -5,6 +5,8 @@ const btn = document.getElementById("search-btn");
 
 const wakeupText = document.getElementById("wakeup-text");
 
+fetch(`${url}suggestions/abra`).catch(() => {});
+
 function showSkeleton() {
     result.innerHTML = `
         <div class="skeleton-word">
